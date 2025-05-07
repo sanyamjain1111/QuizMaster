@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<style>
+ 
+    .nav123
+    {
+        display: flex;
+        flex-direction: row;
+    }
+    .navbar{
+        margin-top: 20px;
+        
+    }
+    .nav-item
+    {
+        padding-left: 10px;
+        padding-right: 20px;
+    }
+    .cl1
+    {
+     margin-left: 75%;
+      border: rgb(169, 169, 169) 1px solid;
+      border-radius: 10%;
+    }
+    .cl2
+    {
+      min-width: 200px;
+    }
+    .subject
+    {
+      font-family:'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+     
+      
+    
+      text-align:center ;
+      height:50px;
+
+    }
+   
+    .main
+    {
+      width: 80%;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      margin-left: 10%;
+     
+      
+    }
+    .subjects
+    {
+      color:color-mix(in srgb, rgb(10, 48, 54) 80%, rgb(105, 96, 96) 5%);
+      height:50px;
+    
+    }
+    .chapters
+    {
+      color:rgb(158, 107, 31);
+      padding: 1px 2px;
+      margin-top: 5px;
+      margin-right: 20px;
+    }
+    .chaptersection
+    {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+    } 
+    .description
+    {
+   
+    
+      background-color: color-mix(in srgb,rgb(87, 81, 196) 15%, rgb(146, 209, 123) 35%, rgb(189, 148, 148) 20%);
+      min-height: 420px;
+      max-height:max-content;
+      padding: 12px 20px;
+      margin:20px;
+      border: 1px solid black;
+      border-radius: 0.5%;    
+      word-spacing: 4px;
+      letter-spacing: 1px;
+    }
+    .descript
+    {
+      font-size: 18px;
+    }
+    li
+    {
+      min-width:fit-content;
+    }
+    .head
+    {
+      text-align: center;
+    }
+    .buttons
+    {
+      width: 50px;
+    }
+    p>span{
+      padding-left: 5px;
+    }
+    @media screen and (max-width: 1000px) 
+    {
+      .cl1
+      {
+        margin-left: 0%;
+        max-width: 300px;
+        width: 100px;
+      }
+    }
+</style>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light ">
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{{ url_for('home') }}">Home </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('livequiz') }}">Live quizzes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Profile
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{{ url_for('personal_details') }}">Personal details</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('academic_details') }}">Academic details</a></li>
+          </ul>
+        </li>
+        <form class="form-inline my-2 my-lg-0" method="POST" ><div class="nav123">
+          <input class="form-control mr-sm-2 cl2" type="search" placeholder="Search" aria-label="Search" name="search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button></div>
+        </form>
+        <li class="nav-item cl1">
+          <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+        </li> </ul>
+    </div>
+  </nav> <br>
+  <h2>{{message}}</h2>  <br><div class="main">
+    <table class="table table-bordered table-striped">
+      <thead>
+          <th colspan="6" class="head"><h3>Upcomming Quizzes</h3></th>
+
+      
+        {% if quiz_details %}
+        
+        <tr class="table-dark ">
+          <th>Quiz ID</th>
+          <th>No. of questions</th>
+          <th>Date of quiz</th>
+          <th>Duration</th>
+          <th colspan="2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for quiz_detail in quiz_details %}
+        {% for list in listforquiz %}
+        {% if quiz_detail.quizid==list.quizid %}
+        <tr>
+          <td>{{quiz_detail.quizid}}</td>
+          <td>{{list.questioncount}}</td>
+          <td>{{quiz_detail.quiz_date}} </td>
+          <td>{{quiz_detail.duration}} </td>
+          <td class="buttons">
+            <button class="btn btn-primary view-btn" 
+            data-bs-toggle="modal" 
+            data-bs-target="#quizModal"
+            data-quizid="{{quiz_detail.quizid}}"
+            data-subject="{{list.subjectname}}"
+            data-chapter="{{list.chapter_name}}"
+            data-questioncount="{{list.questioncount}}"
+            data-quizdate="{{quiz_detail.quiz_date}}"
+            data-duration="{{quiz_detail.duration}}"
+            >
+        View
+    </button></td>
+          {% if list.arg==1 %} {% if quizresponses %}
+          {% set attempted_quiz_ids = quizresponses | map(attribute='quizid') | list %}
+          {% if quiz_detail.quizid in attempted_quiz_ids %}
+          <td class="buttons">
+            <a href="{{ url_for('quizinstructions', quiz_id=quiz_detail.quizid) }}">
+                <button disabled>Attempted</button>
+            </a>
+        </td>
+        {% else %}
+        <td class="buttons">
+            <a href="{{ url_for('quizinstructions', quiz_id=quiz_detail.quizid) }}">
+                <button>Attempt</button>
+            </a>
+        </td>
+        {% endif %}
+          {% else %}
+          <td class="buttons"><a href="{{url_for('quizinstructions',quiz_id=quiz_detail.quizid)}}"><button> Attempt </button></a></td>
+          {% endif %} {% endif %}
+        </tr>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+      </tbody>
+        {% endif %}
+      
+    </table>
+
+  </div>
+  <div class="modal fade" id="quizModal" tabindex="-1" aria-labelledby="quizModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="quizModalLabel">Quiz Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Quiz ID:</strong> <span id="modalQuizID"></span></p>
+                <p><strong>Chapter :</strong><span id="modalChapterName"></span></p>
+                <p><strong>Subject :</strong><span id="modalSubjectName"></span></p>
+                <p><strong>Number of Questions:</strong> <span id="modalQuestionCount"></span></p>
+                <p><strong>Date of Quiz:</strong> <span id="modalQuizDate"></span></p>
+                <p><strong>Duration:</strong> <span id="modalDuration"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+      const viewButtons = document.querySelectorAll(".view-btn");
+      viewButtons.forEach(button => {
+          button.addEventListener("click", () => {
+              const quizID = button.getAttribute("data-quizid");
+              const subjectname=button.getAttribute("data-subject");
+              const chaptername=button.getAttribute("data-chapter");
+              const questionCount = button.getAttribute("data-questioncount");
+              const quizDate = button.getAttribute("data-quizdate");
+              const duration = button.getAttribute("data-duration");
+              document.getElementById("modalQuizID").textContent = quizID;
+              document.getElementById("modalChapterName").textContent = chaptername;
+              document.getElementById("modalSubjectName").textContent = subjectname;
+              document.getElementById("modalQuestionCount").textContent = questionCount;
+              document.getElementById("modalQuizDate").textContent = quizDate;
+              document.getElementById("modalDuration").textContent = duration;
+          });
+      });
+  });
+</script>
+<script>
+  console.log(Date.now())
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

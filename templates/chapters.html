@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin page </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<style>
+    .nav123
+    {
+        display: flex;
+        flex-direction: row;
+    }
+    .navbar{
+        margin-top: 20px;
+        
+    }
+    .nav-item
+    {
+        padding-left: 10px;
+        padding-right: 20px;
+    }
+    .cl1
+    {
+      margin-left: 45%;
+      border: rgb(169, 169, 169) 1px solid;
+      border-radius: 10%;
+    }
+    .cl2
+    {
+      min-width: 200px;
+    }
+    .nav345{
+        background-color: rgba(241, 241, 241, 0.712);
+        margin-left: 0%;
+    }
+    .navwrite
+    {
+        
+       font-size: large;
+        font-family: 'Times New Roman', Times, serif;
+        letter-spacing: 1px;
+        padding-right: 5%;
+        margin-left: 0%;
+    }
+    table{
+        margin-left: 0%;
+        
+    }
+    @media screen and (max-width: 1000px) 
+    {
+      .cl1
+      {
+        margin-left: 0%;
+        max-width: 300px;
+        width: 100px;
+      }
+    }
+</style>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light ">
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{{ url_for('adminhome') }}">Home </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('subjects') }}">Subjects</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('chapters') }}">Chapters</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('questions') }}">Questions</a>
+          </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Student details
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{{ url_for('student_personal_details') }}">Student Personal details</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('student_academic_details') }}">Student Academic details</a></li>
+          </ul>
+        </li>
+       
+     
+
+        <form class="form-inline my-2 my-lg-0" method="POST"><div class="nav123">
+          <input class="form-control mr-sm-2 cl2" type="search" placeholder="Search" aria-label="Search" name="search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button></div>
+        </form>
+      <li class="nav-item cl1">
+        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+      </li> </ul>
+    </div>
+  </nav>
+
+  {% if subjects %}
+          <nav class="navbar navbar-expand-lg nav345 ">
+    
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                
+                {% for subject in subjects %}
+                <li class="nav-item active">
+                    <a class="nav-link navwrite subject-link" href="#" data-subject-id="{{ subject.subject_id }}">{{ subject.subject_name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+            </div></nav>
+            {% endif %}
+      <br>
+     
+            <h4> {{message1}} </h4>
+            <form action="/addchapter" method="POST"> <button type="submit"> + Add new Chapter </button> </form>
+          <br>
+    
+            {% if chapters %}
+            <table class="table table-bordered table-striped">
+              <thead class="table-dark">
+                <tr>
+                  <th>
+                    Chapter id
+                  </th>
+                  <th>
+                     Subject id
+                  </th>
+                  <th>
+                    Chapter Name
+                  </th>
+                  <th>
+                    Description
+                  </th>
+                  <th colspan="2">  </th>
+                  
+                </tr>
+              </thead>
+            
+              {% for chapter in chapters %}
+              
+                <tbody>
+                    <tr class="chapter-row" data-subject-id="{{ chapter.subject_id }}">
+                    <td>
+                      {{chapter.chaoter_id}}
+                    </td>
+                    <td>
+                       {{chapter.subject_id}}
+                    </td>
+                    <td>
+                      {{chapter.chapter_name}}
+                    </td>
+                    <td>
+                      {{chapter.description}}
+                    </td>
+                    <td>
+                      <a href="{{ url_for('edit_chapter', chapter_id=chapter.chaoter_id) }}"><button type="submit"> Edit</button></a>
+                    </td>
+                    <td>
+                      <a href="{{ url_for('delete_chapter', chapter_id=chapter.chaoter_id) }}"><button type="submit"> Delete</button></a>
+                    </td>                    
+                  </tr>
+                
+            {% endfor %}
+          </tbody>
+        </table>
+            {% else %}
+               No chapters 
+               
+            {% endif %}
+            
+          </tr> <br>
+          <h4>{{ message2 }}</h4>
+<hr>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const subjectLinks = document.querySelectorAll('.subject-link');
+        const chapterRows = document.querySelectorAll('.chapter-row');
+
+        subjectLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const selectedSubjectId = link.getAttribute('data-subject-id');
+                chapterRows.forEach(row => {
+                    if (row.getAttribute('data-subject-id') === selectedSubjectId) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

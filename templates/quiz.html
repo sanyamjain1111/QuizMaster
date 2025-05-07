@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <style>
+        form{
+            margin-left: 1%;
+        }
+        nav {
+            height: 60px;
+            background-color: rgb(236, 236, 236);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            position: fixed;
+            width: 96%;
+            margin-top: 0px;
+            z-index: 1000;
+        }
+        h2 {
+            padding: 1%;
+            color: rgb(66, 66, 26);
+            flex-grow: 1;
+        }
+        .timer {
+            font-size: 18px;
+            color: rgb(66, 66, 26);
+            position: relative;
+        }
+        .controls {
+            margin-left: 20px;
+        }
+        .button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            background-color: rgb(66, 66, 26);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: rgb(90, 90, 45);
+        }
+        .submitbutton
+        {
+            position: fixed; 
+            bottom: 20px; 
+            right: 100px; 
+            background-color: #45a049; 
+            color: white;
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+            width: 10%;
+            height:5%;
+        }
+        label{
+            font-size: 14pt;
+        }
+        #question-dialog {
+            position: fixed;
+            scroll-behavior: auto;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            width: 300px; 
+            max-height: fit-content;
+            min-height: 100px;
+            margin-top: 8%;
+        }
+        
+        .question-number {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 50%;
+            cursor: pointer;
+            color: rgb(0, 0, 0);
+        }
+        
+        .unanswered {
+            background-color: grey;
+        }
+        
+        .answered {
+            background-color: green;
+        }
+        .bullets1
+        {
+            background-color: green;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .answered1
+        {
+            display: flex;
+            flex-direction: row;
+            margin: 4px 1px;
+            padding-right: 0%;
+        }
+        .bullets2
+        {
+            background-color: grey;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .uanswered1
+        {
+            display: flex;
+            flex-direction: row;
+        }
+        .instructions
+        {
+            display: flex;
+            flex-direction: column;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            z-index: 1001;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <h2>MCQ Based Quiz</h2>
+        <div class="timer" id="timer">Time Left⏰ : 00:00</div>
+        <div class="controls">
+            <button id="pauseButton" class="button">Pause</button>
+        </div>
+    </nav>
+    <br>
+    
+    <div id="question-dialog">
+        {% for question in questions %}
+        <div class="question-number index" data-question="{{question.qid }}">
+            {{ loop.index }}
+        </div>
+        {% endfor %} <br>
+        <div class="instructions">
+            <div class="answered1"><div class="bullets1"> </div> for answered questions</div>
+            <div class="answered1"><div class="bullets2"> </div> for unanswered questions</div>
+        </div>
+    </div>
+
+    {% if questions %}
+        <form id="quizForm" action="/submitquiz/{{quiz_id}}" method="POST">
+            <ol>
+                {% for question in questions %}
+                <li><h3>{{ question.question }}</h3></li>
+                {% if options %}
+                    {% for option in options %} 
+                        {% if option.question_id == question.qid %}
+                        <label>
+                            <input type="radio" name="question_{{ question.qid }}" value="{{ option.option_id }}">
+                            {{ option.option }} <br><br>
+                        </label> 
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% endfor %}
+            </ol>
+            <button type="submit" class="submitbutton">Submit</button>
+        </form>
+    {% endif %}
+
+    <div id="pauseModal" class="modal">
+        <div class="modal-content">
+            <h3>Timer Paused</h3>
+            <button id="resumeButton" class="button">Resume</button>
+        </div>
+        <div style="
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0, 0, 0, 0.5); 
+            z-index: 1000;">
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            function disableBack() {
+                history.pushState(null, "", location.href);
+                history.replaceState(null, "", location.href);
+            }
+        
+            disableBack();
+            window.onpopstate = function () {
+                disableBack();
+            };
+            let time1 = {{ duration }}; 
+            let timeLeft = time1 * 60; 
+            let timerInterval = null;
+            let startTime = null; 
+            sessionStorage.setItem('startTime', new Date().toISOString());
+
+            function updateTimer() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById("timer").textContent =
+                    `Time Left ⏰: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                if (timeLeft > 0) {
+                    timeLeft--;
+                } else {
+                    clearInterval(timerInterval);
+                
+                    const startTime = new Date(sessionStorage.getItem('startTime'));
+                    const endTime = new Date();
+                    let timeTaken = Math.floor((endTime - startTime) / 1000);
+                
+                    if (isNaN(timeTaken) || timeTaken < 0) {
+                        timeTaken = {{ duration }} * 60; 
+                    }
+                
+                    console.log("Time Taken:", timeTaken);
+                
+                    const timeTakenInput = document.createElement("input");
+                    timeTakenInput.type = "hidden";
+                    timeTakenInput.name = "time_taken";
+                    timeTakenInput.value = timeTaken-1;
+                    document.getElementById("quizForm").appendChild(timeTakenInput);
+                
+                    document.getElementById("quizForm").submit(); 
+                }
+            }
+
+            function startTimer() {
+                
+                if (!timerInterval) {
+                    timerInterval = setInterval(updateTimer, 1000);
+                }
+            }
+
+            function pauseTimer() {
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+                document.getElementById("pauseModal").style.display = " flex";
+            }
+
+            function resumeTimer() {
+                document.getElementById("pauseModal").style.display = "none";
+                startTimer();
+            }
+
+            document.querySelectorAll('input[type="radio"]').forEach((input) => {
+                input.addEventListener("change", () => {
+                    const questionId = input.name.split("_")[1];
+                    const questionNumber = document.querySelector(
+                        `.question-number[data-question="${questionId}"]`
+                    );
+                    if (questionNumber) {
+                        questionNumber.classList.remove("unanswered");
+                        questionNumber.classList.add("answered");
+                    }
+                });
+            });
+
+            document.getElementById("quizForm").addEventListener("submit", function(event) {
+                event.preventDefault(); 
+                const startTime = new Date(sessionStorage.getItem('startTime'));
+                const endTime = new Date(); 
+                timeTaken = Math.floor((endTime - startTime)/1000); 
+                console.log(timeTaken)
+                if (isNaN(timeTaken)) {
+                    alert("Error: Time Taken is not recorded properly!");
+                    return;
+                }
+                console.log("Start Time:", startTime);
+                console.log("End Time:", endTime);
+                console.log("Time Taken:", timeTaken);
+                const timeTakenInput = document.createElement("input");
+                timeTakenInput.type = "hidden";
+                timeTakenInput.name = "time_taken";
+                timeTakenInput.value = timeTaken; 
+                this.appendChild(timeTakenInput);
+                console.log(this)
+                console.log(timeTakenInput)
+
+                this.submit();
+            
+            });
+
+            document.getElementById("pauseButton").addEventListener("click", pauseTimer);
+            document.getElementById("resumeButton").addEventListener("click", resumeTimer);
+
+            startTimer();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal details </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+<style>
+    .nav123
+    {
+        display: flex;
+        flex-direction: row;
+    }
+    .navbar{
+        margin-top: 20px;
+        
+    }
+    .nav-item
+    {
+        padding-left: 10px;
+        padding-right: 20px;
+    }
+    .heading
+    {
+      
+      width: 250px;
+      text-align: center;
+    }
+   .image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.imageupload img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ddd;
+  margin-bottom: 10px;
+}
+
+form input[type="file"] {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #fff;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+button {
+ 
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 8px 8px;
+  border-radius: 5px;
+
+}
+
+.button {
+  margin-top: 10px;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-top: 10px;
+}
+.table {
+  margin-top: 40px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+}
+
+.table th, .table td {
+  padding: 15px;
+  text-align: left;
+}
+
+.table td button {
+  color: rgb(0, 0, 0);
+  border: 1px solid black;
+  padding: 8px 15px;
+  border-radius: 5px;
+}
+
+
+.cl1
+{
+  margin-left: 75%;
+  border: rgb(169, 169, 169) 1px solid;
+  border-radius: 10%;
+  
+}
+.cl2
+{
+  min-width: 200px;
+}
+    li{
+      min-width: max-content;
+    }
+    @media screen and (max-width: 1000px) 
+    {
+      .cl1
+      {
+        margin-left: 0%;
+        max-width: 300px;
+        width: 100px;
+      }
+    }
+
+</style>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light ">
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{{ url_for('home') }}">Home </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('livequiz') }}">Live quizzes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Profile
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{{ url_for('personal_details') }}">Personal details</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('academic_details') }}">Academic details</a></li>
+          </ul>
+        </li>
+        <form class="form-inline my-2 my-lg-0" method="POST"><div class="nav123">
+          <input class="form-control mr-sm-2 cl2" type="search" placeholder="Search" aria-label="Search" name="search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button></div>
+        </form>
+        <li class="nav-item cl1">
+          <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+        </li> </ul>
+    </div>
+  </nav>
+  <br>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <h3>
+    All the personal details are given as :
+  </h3  >
+  <br>
+    <h3>
+      {{warningg}}
+    </h3>
+    
+  </div>
+  <div class="image">
+    <div class="imageupload">
+      {% if img_url %} <img src="{{img_url}}" alt=""> {% else %}
+    <img src="{{ url_for('static', filename='user.png') }}" alt=""> {% endif %}
+    <form action="/upload/{{id}}" method="POST" enctype="multipart/form-data">
+     <input type="file" name="image" accept="image/*"> <button type="submit">Upload</button></form> </div>
+     <div class="name"> <div class="entername">Name :- {{ name}}  <a href="{{ url_for('editname') }}"><div class="button"> <button type="submit">Edit name</button></a> </div>
+</div></div>
+</div> <br>
+
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>{{id}}</th>
+            <th> Action</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        
+            
+            <tr>
+              <td>DOB</td>
+              <td>{{dob}}</td>
+              <td><form action="/edit/dob"><div class="button"> <button type="submit">Edit</button></div></form></td>
+              
+          </tr>
+          <tr>
+            <td>Username</td>
+            <td>{{ username}}</td>
+            <td><form action="/edit/username"><div class="button"> <button type="submit">Edit</button></div></form></td>
+            
+        </tr>
+        <tr>
+          <td>Qualification</td>
+          <td>{{ qualification}}</td>
+          <td><form action="/edit/qualification"><div class="button"> <button type="submit">Edit</button></div></form></td>
+          
+      </tr>
+      <tr>
+          <td>Password</td>
+          <td>{{ password}}</td>
+          <td><form action="/edit/password"><div class="button"> <button type="submit">Edit</button></div></form></td>
+          
+      </tr>
+
+
+        
+    </tbody>
+</table>
+ 
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<style>
+    .nav123
+    {
+        display: flex;
+        flex-direction: row;
+    }
+    .navbar{
+        margin-top: 20px;
+        
+    }
+    .nav-item
+    {
+        padding-left: 10px;
+        padding-right: 20px;
+    }
+        .heading
+        {
+            margin-top: 50px;
+            margin-bottom: 50px;
+            margin-left:35%;
+            padding-top: 5px;;
+            align-items: center;
+            text-align: center;
+            background-color: #d1fae5;
+            height:60px;
+            width:450px;
+        }
+        .main
+        {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            height:400px;
+            margin-left: 0px;
+        }
+        img
+        {
+            display: inline-block;
+            height:40px;
+            width:40px;
+            padding: 5px 5px;
+        }
+        .user_reg
+        {
+            display:flex;
+            flex-direction: column;
+            border: 1px solid black;
+            border-radius:15px;
+            margin-right: 10%;
+            margin-left:36%;
+            margin-top:4%;
+            width: 410px;
+            height:450px;
+            align-items: center;
+            background-color: rgb(252, 250, 239);
+            
+        }
+        input{
+            margin: 10px;
+            margin-bottom: 0px;
+            background-color: white;
+            border-radius: 5px;
+            height:30px;
+            width:190px;
+            
+        }
+        textarea{
+          margin: 10px;
+            background-color: white;
+            border-radius: 5px;
+            height:100px;
+            width:350px;
+            max-width: 370px;
+            max-height: 130px;
+
+        }
+        .form{
+            margin-left: 7px;
+           
+        }
+        .ahead
+        {
+            margin-left:5px;
+            margin-bottom: 5px;
+            text-align: center;
+            padding-top: 5%;
+            text-decoration:bold;
+            font-size: larger;
+            margin-top:5px;
+        }
+     
+       .input2
+       {
+        margin-left: 60px;
+       }
+    
+        .button3{
+            width:100px;
+            height:35px;
+            margin:5px;
+            margin-left:0px;
+            border-radius: 15px;
+        }
+        .buttons2{
+            margin-left:36%;
+            margin-top:2%;
+        }
+       .top
+       {
+        display:flex;
+        flex-direction: row;
+       }
+       .input
+       {
+    
+        margin-right: 0px;
+        margin-left: 0px;
+       }
+       marquee
+       {
+           color:red;
+       }
+       .cl1
+       {
+         margin-left: 45%;
+         border: rgb(169, 169, 169) 1px solid;
+         border-radius: 10%;
+       }
+       .cl2
+       {
+         min-width: 200px;
+       }
+       @media screen and (max-width: 1000px) 
+       {
+         .cl1
+         {
+           margin-left: 0%;
+           max-width: 300px;
+           width: 100px;
+         }
+       }
+</style>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light ">
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{{ url_for('adminhome') }}">Home </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('subjects') }}">Subjects</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('chapters') }}">Chapters</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('questions') }}">Questions</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Student details
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{{ url_for('student_personal_details') }}">Student Personal details</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('student_academic_details') }}">Student Academic details</a></li>
+          </ul>
+        </li>
+      
+        <form class="form-inline my-2 my-lg-0" method="POST"><div class="nav123">
+          <input class="form-control mr-sm-2 cl2" type="search" placeholder="Search" aria-label="Search" name="search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button></div>
+        </form>
+        <li class="nav-item cl1">
+          <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+        </li> </ul>
+    </div>
+  </nav>  <br>
+  <h3>{{warningg}}</h3>
+  <div class="main">
+        <div class="user_reg">
+            <div class="top">
+  <div class="ahead">{{option3}} the {{option1}}</div></div> <br>
+      <div class="edit">
+    <form action="/{{option4}}completech{% if option4 != 'add' %}/{{ chapter_id }}{% endif %}" method="POST" class="form">
+        <div class="input">Enter the {{option}} you want to {{option4}} :  &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<input type="text" name="{{dynamic_name}}" class="input2" value="{{chapter_name}}"></div>
+        <br><div class="input">Choose the subject id under which you want to {{option4}} : &nbsp; &nbsp; <select name="sub_id" id="" class="input2">
+          <option value="Choose"> Choose the subject here</option>
+          {% for subject1 in subjects1 %}
+          <option value="{{subject1.subject_id}}" {% if subject1.subject_id==current_subject_id %} selected{% endif %}>{{subject1.subject_name}} ({{subject1.subject_id}})</option>
+        {% endfor %}
+        </select></div>
+        <br><div class="input"> Enter the description <br><textarea name="description" id="">{{description}}</textarea> </div>
+       <div class="buttons2"> <div><button type="submit" class="button3">Submit</button></div></div>
+    </form>
+
+</div></div></div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

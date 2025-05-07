@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home page</title>
+</head>
+<style>
+    .heading
+    {
+        margin-top: 50px;
+        margin-bottom: 50px;
+        margin-left:35%;
+        padding-top: 5px;;
+        align-items: center;
+        text-align: center;
+        background-color: #d1fae5;
+        height:60px;
+        width:450px;
+    }
+    .main
+    {
+        display: flex;
+        flex-direction: row;
+    }
+    img
+    {
+        height:190px;
+        width:200px;
+        padding: 5px 5px;
+    }
+    .admin
+    {
+        display:flex;
+        flex-direction: column;
+        border: 1px solid black;
+        border-radius:15px;
+        margin-right: 10%;
+        margin-left:20%;
+        margin-top:4%;
+        width: 350px;
+        height:400px;
+        align-items: center;
+        background-color: #d1fae5;
+        
+    }
+    .user
+    {
+        display:flex;
+        flex-direction: column;
+        border: 1px solid black;
+        border-radius:15px;
+        margin-top:4%;
+        margin-right: 20%;
+        width: 350px;
+        height:400px;
+        align-items: center;
+        background-color: #d1fae5;
+        
+    }
+    input{
+        margin:10px 10px;
+        background-color: rgb(252, 250, 239);
+        border-radius: 25px;
+        height:19px;
+        width:200px;
+    }
+    form{
+        margin-left: 7px;
+       
+    }
+    .ahead
+    {
+        margin-left:5px;
+        margin-bottom: 25px;
+        font-size: larger;
+        margin-top:5px;
+    }
+    .uhead
+    {
+        margin-left:5px;
+        margin-bottom: 25px;
+        font-size: larger;
+        margin-top:5px;
+    }
+    .warning
+    {
+        margin-left:5px;
+        margin-bottom: 25px;
+        font-size: larger;
+        margin-top:5px;
+        color: red;
+    }
+    body{
+        background-color: rgb(169,230,189);
+    }
+    .buttons
+    {
+        display:flex;
+        flex-direction: row;
+    }
+    button{
+        width:100px;
+        height:25px;
+        margin:5px;
+        margin-left:16px;
+        border-radius: 15px;
+    }
+    .buttons2{
+        margin-left: 15%;
+    }
+    marquee
+    {
+        color:red;
+    }
+   
+</style>
+<body>
+    <h1><div class="heading">Welcome to the Quiz Master </div></h1>
+    <h1>
+    <marquee direction="left to right">{{warningg}}</marquee>
+    </h1>
+    <div class="main">
+        <div class="admin">
+            <div class="ahead">Admin login</div>
+            <div class="adminp">
+                <img src="{{ url_for('static', filename='admin1.png') }}" alt="Image">
+        </div>
+        <div class="adminf">
+            <form action="/admin" method="POST">
+                <div><input type="text" placeholder="   abc@gmail.com" name="ausername" id="ausername"></div>
+               <div> <input type="password" placeholder="   Enter your password" name="apassword" id="apassword"></div>
+               <div class="buttons2"> <div><button type="submit">Login</button></div></div>
+            </form>
+
+        </div>
+        
+        </div>
+        <div class="user">
+            <div class="uhead">User login</div>
+            <img src="{{ url_for('static', filename='image.png') }}" alt="Image">
+        
+        <div class="userf">
+            <form action="/login" method="POST">
+                <div><input type="email" placeholder="    Enter your username/email" name="username"></div>
+               <div> <input type="password" placeholder="    Enter your password" name="password"></div>
+            
+            <div class="buttons"> <div><button type="submit">Login</button></div></form>
+            
+            <form action="/user_register" method="POST"> <div><button type="submit">Register</button></div></form>
+        </div>
+        </div></div>
+
+        
+    </div>
+    
+</body>
+</html>

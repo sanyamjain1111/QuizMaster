@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Instructions</title>
+</head>
+<body>
+   
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .main {
+            max-width: 800px;
+            line-height: 1.5;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #444;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .start-button {
+           display: block;
+            width: 150px;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            
+        }
+        .start-button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <h1>Quiz Instructions</h1>
+        <p>Please read the following instructions carefully before starting the quiz:</p>
+        <ul>
+            <li>The quiz consists of multiple-choice questions(MCQs).</li>
+            <li>You will have {{duration}} minutes to complete the quiz.</li>
+            <li>Each question has only one correct answer.</li>
+            <li>Avoid refreshing or closing the browser during the quiz, as it may result in losing progress.</li>
+            <li>Make sure you have a stable internet connection before starting the quiz.</li>
+            <li>Your score will be displayed at the end of the quiz.</li>
+        </ul>
+        <p>Click the button below to start the quiz. Good luck!</p> <br>
+        <a href="/startquiz/{{id}}" class="start-button">Start Quiz</a>
+    </div>
+</body>
+</html>
+
+</body>
+</html>
